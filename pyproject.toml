@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "inference-model"
+name = "cicd-workflow"
 version = "0.1.0"
 description = ""
 authors = ["rrichards21 <rrichards@inf.udec.cl>"]
@@ -17,3 +17,8 @@ pytest = "^8.2.2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
