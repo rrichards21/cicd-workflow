@@ -1,18 +1,57 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
-  Explore-GitHub-Actions:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+    - name: Install dependencies
+      run: poetry install
+    - name: Run tests
+      run: poetry run pytest
+
+  # build-and-push:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Build and push Docker image
+  #     env:
+  #       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  #       GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+  #     run: |
+  #       echo $GCP_SA_KEY | docker login -u _json_key --password-stdin https://gcr.io
+  #       docker build -t gcr.io/$GCP_PROJECT_ID/model-inference:${{ github.sha }} .
+  #       docker push gcr.io/$GCP_PROJECT_ID/model-inference:${{ github.sha }}
+
+  # deploy:
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Set up Google Cloud SDK
+  #     uses: google-github-actions/setup-gcloud@v0.2.1
+  #     with:
+  #       project_id: ${{ secrets.GCP_PROJECT_ID }}
+  #       service_account_key: ${{ secrets.GCP_SA_KEY }}
+  #   - name: Deploy to Cloud Run
+  #     run: |
+  #       gcloud run deploy model-inference \
+  #         --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/model-inference:${{ github.sha }} \
+  #         --platform managed \
+  #         --region us-central1 \
+  #         --allow-unauthenticated
