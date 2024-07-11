@@ -23,6 +23,35 @@ jobs:
       run: poetry install
     - name: Run tests
       run: poetry run pytest
+  
+  build-and-test:
+    needs: test
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: false
+        load: true
+        tags: model-inference:test
+
+    - name: Run tests in Docker container
+      run: |
+        docker run --rm model-inference:test poetry run pytest
+
+    - name: Save Docker image
+      run: docker save model-inference:test > model-inference.tar
+
+    - name: Upload Docker image as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: docker-image
+        path: model-inference.tar
 
   # build-and-push:
   #   needs: test
