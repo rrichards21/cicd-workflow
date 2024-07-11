@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "inference-model"
+version = "0.1.0"
+description = ""
+authors = ["rrichards21 <rrichards@inf.udec.cl>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+torch = "^2.3.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
