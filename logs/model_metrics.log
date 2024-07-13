@@ -1,0 +1,2 @@
+2024-07-13T00:01:43,192 - PredictionTime.ms:29.22|#ModelName:doubleit_model,Level:Model|#hostname:LAPTOP-9SVIIN5J,requestID:bf1e4664-652a-454e-a513-84de01d40864,timestamp:1720843303
+2024-07-13T00:01:54,224 - PredictionTime.ms:36.0|#ModelName:doubleit_model,Level:Model|#hostname:LAPTOP-9SVIIN5J,requestID:2df06225-829b-406a-bcaa-1e3f10e39850,timestamp:1720843314

@@ -1,18 +1,19 @@
 [tool.poetry]
-name = "cicd-workflow"
+name = "doubleit"
 version = "0.1.0"
 description = ""
 authors = ["rrichards21 <rrichards@inf.udec.cl>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.9"
+numpy = "1.26.4"
 torch = "^2.3.1"
-numpy = "^2.0.0"
+torchserve = "^0.11.0"
+torch-model-archiver = "^0.11.0"
+nvgpu = "^0.10.0"
+pyyaml = "^6.0.1"
 
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.2.2"
 
 [build-system]
 requires = ["poetry-core"]

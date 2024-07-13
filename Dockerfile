@@ -1,17 +1,22 @@
-FROM python:3.12
+FROM python:3.9-slim
 
 WORKDIR /app
 
-# Instalar poetry
+ENV JAVA_HOME C:/Program Files/Java/jdk-22
+ENV PATH $JAVA_HOME/bin:$PATH
+
+# Instalar Poetry
 RUN pip install poetry
 
-# Copiar archivos de configuración de poetry
-COPY pyproject.toml poetry.lock ./
+# Copiar archivos del proyecto
+COPY pyproject.toml poetry.lock* ./
+RUN poetry install --no-root
 
-# Instalar dependencias
-RUN poetry config virtualenvs.create false \
-  && poetry install --no-dev --no-interaction --no-ansi
+# Copiar archivos del proyecto
+COPY . .
 
-COPY src/ .
+# Exponer puertos
+EXPOSE 8080 8081
 
-CMD ["python", "inference.py"]
+# Comando para iniciar TorchServe
+CMD ["poetry", "run", "torchserve", "--start", "--model-store", "model_store", "--models", "doubleit_model.mar","--ts-config","config/config.properties"]
