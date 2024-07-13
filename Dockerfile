@@ -1,19 +1,11 @@
-# Usa una imagen de Python 3.9 slim como imagen base
-FROM python:3.9-slim
+# Usa una imagen de Python 3.9 slim basada en Debian Buster
+FROM python:3.9-slim-buster
 
-# Instala el gestor de paquetes necesarios
+# Instala OpenJDK 11 desde los repositorios de Debian
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    wget \
-    gnupg \
+    openjdk-11-jdk-headless \
     && apt-get clean
-
-# Configura el repositorio de OpenJDK 11
-RUN mkdir -p /usr/share/man/man1 && \
-    echo "deb http://deb.debian.org/debian stretch-backports main" | tee /etc/apt/sources.list.d/stretch-backports.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends openjdk-11-jdk-headless && \
-    apt-get clean
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /app
