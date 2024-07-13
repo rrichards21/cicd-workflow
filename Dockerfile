@@ -1,22 +1,26 @@
+# Usa una imagen de Python 3.9 slim como imagen base
 FROM python:3.9-slim
 
+# Instala OpenJDK 11
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jdk && \
+    apt-get clean;
+
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-ENV JAVA_HOME C:/Program Files/Java/jdk-22
-ENV PATH $JAVA_HOME/bin:$PATH
-
-# Instalar Poetry
+# Instala Poetry
 RUN pip install poetry
 
-# Copiar archivos del proyecto
+# Copia los archivos del proyecto
 COPY pyproject.toml poetry.lock* ./
 RUN poetry install --no-root
 
-# Copiar archivos del proyecto
+# Copia el resto de los archivos del proyecto
 COPY . .
 
 # Exponer puertos
 EXPOSE 8080 8081
 
 # Comando para iniciar TorchServe
-CMD ["poetry", "run", "torchserve", "--start", "--model-store", "model_store", "--models", "doubleit_model.mar","--ts-config","config/config.properties"]
+CMD ["poetry", "run", "torchserve", "--start", "--model-store", "model_store", "--models", "doubleit_model.mar", "--ts-config", "config/config.properties"]
