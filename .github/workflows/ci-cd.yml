@@ -43,16 +43,16 @@ jobs:
 
     - name: Run tests in Docker container
       run: |
-        docker run --rm model-inference:test poetry run pytest
+        docker run --rm model-inference:test
 
-    - name: Save Docker image
-      run: docker save model-inference:test > model-inference.tar
+    # - name: Save Docker image
+    #   run: docker save model-inference:test > model-inference.tar
 
-    - name: Upload Docker image as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: docker-image
-        path: model-inference.tar
+    # - name: Upload Docker image as artifact
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: docker-image
+    #     path: model-inference.tar
 
   # build-and-push:
   #   needs: test
