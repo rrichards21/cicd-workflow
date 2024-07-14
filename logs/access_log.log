@@ -1,2 +1,0 @@
-2024-07-13T00:01:43,192 - /[0:0:0:0:0:0:0:1]:54069 "POST /predictions/doubleit_model HTTP/1.1" 200 36
-2024-07-13T00:01:54,224 - /[0:0:0:0:0:0:0:1]:54069 "POST /predictions/doubleit_model HTTP/1.1" 200 39
